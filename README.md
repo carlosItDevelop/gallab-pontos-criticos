@@ -1,12 +1,13 @@
 # Discussão sobre `Pontos Críticos` antes da implantação (Gal-Lab-Solutions / Tom System)
 
-### Equipe Cooperchip
+### [Equipe Cooperchip]
 
 Já testei. Está funcionando perfeitamente, mas precisamos de ajustes em alguns processos. 
 
-- Se todos os Clientes, Vendedores e Fornecedores, ao serem criados, ganham, além de um Id (herdado de EntityBase) um PessoaId gerado no Construtor, como pode ver nos códigos que vou postar logo após essa explicação / observação aqui, por que a ideia de termos "PessoaTelefone, PessoaContato, PessoaEndereco e PessoaDadosBancarios" seria melhor do que simplesmente termos as propriedades "Pessoa e PessoaId" em Cliente, Fornecedor e Vendedor (e todas as outras entidades que possam ser criadas no futuro que representem uma Pessoa e tenham uma coleção de "Telefone, Contato, Endereco e DadosBancarios"?
+- Se todos os Clientes, Vendedores e Fornecedores, ao serem criados, ganham, além de um Id (herdado de EntityBase) um PessoaId gerado no Construtor, como pode ver nos códigos que vou postar logo após essa explicação / observação aqui, por que a ideia de termos "PessoaTelefone, PessoaContato, PessoaEndereco e PessoaDadosBancarios" seria melhor do que simplesmente termos as propriedades "Pessoa e PessoaId" em Cliente, Fornecedor e Vendedor (e todas as outras entidades que possam ser criadas no futuro que representem uma Pessoa e tenham uma coleção de "Telefone, Contato, Endereco e DadosBancarios") ?!
 
-- Olhe as classes:
+- Observe as classes (APENAS PEQUENAS PARTES RELEVANTES):
+---
 
 ```csharp
 using GeneralLabSolutions.Domain.DomainObjects;
@@ -38,39 +39,10 @@ namespace GeneralLabSolutions.Domain.Entities
         }
 
         public Guid PessoaId { get; set; }
-
         public Pessoa Pessoa { get; set; }
 
-        public string Nome { get; private set; }
-
-        public string Documento { get; private set; }
-        public TipoDePessoa TipoDePessoa { get; private set; }
-
-        // Email do cliente
-        public string Email { get; private set; }
-        // Status do cliente (e.g., Ativo, Inativo)
-        public StatusDoCliente StatusDoCliente { get; set; } = StatusDoCliente.Ativo;
-        // Tipo de cliente (e.g., Comum, Especial)
-        public TipoDeCliente TipoDeCliente { get; set; } 
-            = TipoDeCliente.Comum;
-        // Coleção de pedidos realizados pelo cliente
-        public virtual ICollection<Pedido> Pedidos { get; set; } = new List<Pedido>();
-
-        // Define o email do cliente
-        public void SetEmail(string newEmail) => Email = newEmail;
-
-        public void AddPedido(Pedido pedido)
-            => Pedidos.Add(pedido);
-
-        public void SetNome(string nome) => Nome = nome;
-
-        // Define o tipo de pessoa
-        public void SetTipoDePessoa(TipoDePessoa tipoDePessoa)
-            => TipoDePessoa = tipoDePessoa;
-
-        // Define o documento da pessoa
-        public void SetDocumento(string documento)
-            => Documento = documento;
+        // Continuação do código...
+		
     }
 }
 
@@ -110,33 +82,11 @@ namespace GeneralLabSolutions.Domain.Entities
         }
 
         public Guid PessoaId { get; private set; }
-
         public Pessoa Pessoa { get; private set; }
 
-        public string Nome { get; private set; }
-        public string Documento { get; private set; }
-        public TipoDePessoa TipoDePessoa { get; private set; }
-
-        public string Email { get; set; }
 
         // Status do fornecedor (e.g., Ativo, Inativo)
-        public StatusDoFornecedor StatusDoFornecedor { get; set; } = StatusDoFornecedor.Ativo;
-        // Coleção de produtos fornecidos pelo fornecedor
-        public virtual ICollection<Produto> Produtos { get; set; } = new List<Produto>();
-
-        public void AddProduto(Produto produto) 
-            => Produtos.Add(produto);
-
-        public void SetNome(string nome)
-            => Nome = nome;
-
-        // Define o tipo de pessoa
-        public void SetTipoDePessoa(TipoDePessoa tipoDePessoa)
-            => TipoDePessoa = tipoDePessoa;
-
-        // Define o documento da pessoa
-        public void SetDocumento(string documento)
-            => Documento = documento;
+		// Outras partes do código...
 
     }
 
@@ -178,28 +128,7 @@ namespace GeneralLabSolutions.Domain.Entities
 
         public Pessoa Pessoa { get; private set; }
 
-        public string Nome { get; private set; }
-        public string Documento { get; private set; }
-        public TipoDePessoa TipoDePessoa { get; private set; }
-
-        // Email do vendedor
-        public string Email { get; set; }
-        // Status do vendedor (e.g., Contratado, Freelancer)
-        public StatusDoVendedor StatusDoVendedor { get; set; } = StatusDoVendedor.Contratado;
-        // Coleção de pedidos realizados pelo vendedor
-        public virtual ICollection<Pedido> Pedidos { get; set; } = new List<Pedido>();
-
-
-        public void SetNome(string nome)
-            => Nome = nome;
-
-        // Define o tipo de pessoa
-        public void SetTipoDePessoa(TipoDePessoa tipoDePessoa)
-            => TipoDePessoa = tipoDePessoa;
-
-        // Define o documento da pessoa
-        public void SetDocumento(string documento)
-            => Documento = documento;
+		// Continuação do código...
 
     }
 }
@@ -242,11 +171,12 @@ using GeneralLabSolutions.Domain.Entities.Base;
 namespace GeneralLabSolutions.Domain.Entities
 {
     /// <summary>
-    /// Modelo que associa Pessoa com Telefone
+    /// Modelo que associa Pessoa com Telefone.
+	/// ToDo: Retirei a herança de EntityBase, pois a chave primária é a composta: 
+	/// PessoaId + TelefoneId; Documentador: Não perca de vista esta anotação!
     /// </summary>
     public class PessoaTelefone
     {
-        // ToDo: Retirei a herança de EntityBase, pois a chave primária é a composta: PessoaId + TelefoneId; Documentador: Não perca de vista esta anotação!
 
         public Guid PessoaId { get; set; }
         public Pessoa? Pessoa { get; set; }
@@ -273,7 +203,8 @@ namespace GeneralLabSolutions.Domain.Entities
 
     /// <summary>
     /// Modelo que associa Pessoa com DadosBancarios
-    /// ToDo: Retirei a herança de EntityBase, pois a chave primária é a composta: PessoaId + DadosBancariosId; Documentador: Não perca de vista esta anotação!
+    /// ToDo: Retirei a herança de EntityBase, pois a chave primária é a composta: 
+	/// PessoaId + DadosBancariosId; Documentador: Não perca de vista esta anotação!
     /// </summary>
     public class PessoaDadosBancarios
     {
@@ -298,11 +229,11 @@ namespace GeneralLabSolutions.Domain.Entities
 
 Diga, se entendeu e vamos discutir o caso! :(
 
-Observação: Sei que seria uma refatoração grande que precisaríamos fazer, mas estou em dúvidas, agora, se tomei a decisão correta neste MER (Modelo Entidade Relacional)  :(
+> Observação: Sei que seria uma refatoração grande que precisaríamos fazer, mas estou em dúvidas, agora, se tomei a decisão correta neste MER (Modelo Entidade Relacional)  :(
 ---
 
 
-### Resposta do Google AI Studio
+### [Google AI Studio]
 
 Entendi perfeitamente a sua dúvida, e ela é muito pertinente! É uma discussão clássica em design de banco de dados e modelagem de entidades: **quando usar uma relação N:N complexa versus múltiplas relações 1:N mais simples?**
 
@@ -362,14 +293,14 @@ Você **não** está errado em questionar. O modelo N:N que você implementou é
     *   Se o projeto está no início e a complexidade já incomoda, refatorar *pode* valer a pena a longo prazo.
     *   Se o projeto está avançado e o sistema funciona, talvez seja melhor conviver com a complexidade atual e focar em otimizar as consultas e o gerenciamento dentro do modelo existente.
 
-Não fique desanimado! É normal ter essas dúvidas durante o desenvolvimento. O importante é entender os prós e contras de cada abordagem. O que você prefere fazer: manter a estrutura atual ou discutir a viabilidade da refatoração?
+> Não fique desanimado! É normal ter essas dúvidas durante o desenvolvimento. O importante é entender os prós e contras de cada abordagem. O que você prefere fazer: manter a estrutura atual ou discutir a viabilidade da refatoração?
 ---
 
-### equipe Cooperchip
+### [Equipe Cooperchip]
 
 Prefiro discutir a viabilidade da refatoração!
 
-### Google AI Studio
+### [Google AI Studio]
 
 Ótimo, vamos mergulhar na viabilidade da refatoração. É bom que você esteja pensando criticamente sobre a estrutura agora.
 
@@ -434,7 +365,7 @@ Embora a refatoração seja um esforço considerável, o modelo 1:N parece **mai
 
 **O que você acha? Está disposto a encarar o esforço da refatoração em troca de um modelo mais simples no futuro? Ou prefere otimizar dentro da estrutura atual?**
 
-### Equipe Cooperchip
+### [Equipe Cooperchip]
 
 Prefiro refatorar, pois facilitaria muito as consultas, relatórios e os CRUDs na apresentação (nas Views).
 
@@ -451,7 +382,7 @@ E acredito muito numa premissa que utilizo com meus alunos: "Bem começado, meta
 Dê sua opinião.
 - Vou pensar um pouco e já volto.
 
-### Google AI Studio
+### [Google AI Studio]
 
 Você está coberto de razão em todos os seus pontos, e sua perspectiva como Dev Sênior e DBA é extremamente valiosa aqui.
 
@@ -473,14 +404,14 @@ Considerando:
 
 A refatoração é a escolha estratégica mais sólida a longo prazo. Será um trabalho inicial, sim, mas um investimento que trará retornos significativos em termos de clareza do código, facilidade de manutenção e performance das consultas.
 
-Talvez você possa começar mapeando os passos exatos e talvez atacar uma entidade de cada vez (ex: começar refatorando tudo relacionado a `Telefone`).
+- Talvez você possa começar mapeando os passos exatos e talvez atacar uma entidade de cada vez (ex: começar refatorando tudo relacionado a `Telefone`).
 ---
 
-### Equipe Cooperchip
+### [Equipe Cooperchip]
 
 Ok. Vou parar por 1 hora para considerar tudo e volto.
 
-### Google AI Studio
+### [Google AI Studio]
 
 Tudo bem. Descanse um pouco... É bom **recarregar as energias com pequenas pausas** para reflexão. 
 Se precisar de mais análises para sua decisão é só chamar!
