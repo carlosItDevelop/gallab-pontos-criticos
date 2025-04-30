@@ -1,4 +1,4 @@
-# Discussão sobre `Pontos Críticos` antes da implantação (Gal-Lab-Solutions / Tom System)
+## Discussão sobre `Pontos Críticos` antes da implantação (Gal-Lab-Solutions / Tom System)
 
 ### [Equipe Cooperchip]
 
@@ -85,8 +85,7 @@ namespace GeneralLabSolutions.Domain.Entities
         public Pessoa Pessoa { get; private set; }
 
 
-        // Status do fornecedor (e.g., Ativo, Inativo)
-		// Outras partes do código...
+        // Continuação do código...
 
     }
 
